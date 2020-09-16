@@ -25,11 +25,14 @@ vnoremenu <script> ToolBar.togglebg <ESC><SID>TogBG<ESC>gv
 tmenu ToolBar.togglebg Toggle light and dark background modes
 noremap <SID>TogBG  :call <SID>TogBG()<CR>
 
-function! s:TogBG()
-    let &background = ( &background == "dark"? "light" : "dark" )
-    if exists("g:colors_name")
-        exe "colorscheme " . g:colors_name
-    endif
+function! s:TogBG() abort
+  let &background = ( &background ==# 'dark'? 'light' : 'dark' )
+  if exists('g:loaded_lightline') && g:colors_name =~# 'github'
+    execute 'source ' . g:plug_home . '/vim-colors-github/autoload/lightline/colorscheme/github.vim'
+    windo call lightline#colorscheme()
+  elseif exists('g:colors_name')
+    exe 'colorscheme ' . g:colors_name
+  endif
 endfunction
 
 if !exists(":ToggleBG")
